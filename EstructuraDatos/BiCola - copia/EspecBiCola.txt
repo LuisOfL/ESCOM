@@ -1,0 +1,40 @@
+Espec BiCola
+   Constructoras:
+      nuevaBi: -> BiCola;
+      formarIzq: Elem, BiCola -> BiCola;
+      formarDer: BiCola, Elem -> Bicola;
+   Observadoras:
+      esnuevaBi: BiCola -> Bool;
+      izquerdo: BiCola -> Elem;
+      derecho: BiCola -> Elem;
+   Desdobladoras:
+      desformarIzq: BiCola -> BiCola;
+      desformarDer: BiCola -> BiCola;
+   Axiomas: Elem e, BiCola q;
+      [bi1] esnuevaBi(nuevaBi()) = Cierto;
+      [bi2] esnuevaBi(formarIzq(e,q)) = Falso;
+      [bi3] esnuevaBi(formarDer(q,e)) = Falso;
+      [bi4] izquierdo(nuevaBi()) = ERROR!!!
+      [bi5] izquierdo(formarIzq(e,q)) = e;
+      [bi6] izquierdo(formarDer(q,e)) = Si esnuevaBi(q)
+                                            ret e;
+                                        Sino
+                                            ret izquierdo(q);
+      [bi7] derecho(nuevaBi()) = ERROR!!!
+      [bi8] derecho(formarIzq(e,q)) = Si esnuevaBi(q)
+                                            ret e;
+                                      Sino ret derecho(q);
+      [bi9] derecho(formarDer(q,e)) = e;
+      [b10] desformarIzq(nuevaBi()) = ERROR!!!
+      [b11] desformarIzq(formarIzq(e,q)) = q;
+      [b12] desformarIzq(formarDer(q,e)) = Si esnuevaBi(q)
+                                              ret q;
+                                     Sino
+                                        ret formarDer(desformarIzq(q),e);
+      [b13] desformarDer(nueveBi()) = ERROR!!!!
+      [b14] desformarDer(formarIzq(e,q)) = Si esnuevaBi(q)
+                                              ret q;
+                                     Sino
+                                       ret formarIzq(e,desformarDer(q));
+      [b15] desformarDer(formarDer(q,e)) = q;
+Fin BiCola.

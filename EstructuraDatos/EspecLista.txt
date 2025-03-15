@@ -1,0 +1,18 @@
+Espec Lista
+  Constructoras:
+     vacia: -> Lista;
+     cons: Elem, Lista -> Lista;
+  Observadoras:
+     esvacia: Lista -> Bool;
+     cabeza: Lista -> Elem;
+  Desdobladora:
+     resto: Lista -> Lista;
+
+  Axiomas: Elem e, Lista l:
+    [l1] esvacia(vacia())= Cierto;
+    [l2] esvacia(cons(e,l)) = Falso;
+    [l3] cabeza(vacia()) = ERROR!!!!
+    [l4] cabeza(cons(e,l)) = e;
+    [l5] resto(vacia()) = ERROR!!!!
+    [l6] resto(cons(e,l)) = l;
+Fin Lista.

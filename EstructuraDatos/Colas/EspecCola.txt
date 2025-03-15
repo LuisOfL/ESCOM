@@ -1,0 +1,22 @@
+Espec Cola
+   Constructoras:
+      nueva: -> Cola;
+      formar: Cola, Elem -> Cola;
+   Observadoras:
+      esnueva: Cola -> Bool;
+      primero: Cola -> Elem;
+   Desdobladora:
+      desformar: Cola -> Cola;
+   Axiomas: Cola q, Elem e;
+      [q1] esnueva(nueva()) = Cierto;
+      [q2] esnueva(formar(q,e)) = Falso;
+      [q3] primero(nueva()) = ERROR!!!
+      [q4] primero(formar(q,e)) = Si(esnueva(q))  // [e]
+                                    ret e;
+                                  Sino primero(q); //  <-[a,b,c,e]  <-
+      [q5] desformar(nueva()) = ERROR;
+      [q6] desformar(formar(q,e)) = Si(esnueva(q))
+                                       ret q;
+                                    Sino formar(desformar(q),e);
+Fin Cola.
+
