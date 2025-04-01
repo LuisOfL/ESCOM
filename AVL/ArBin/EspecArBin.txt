@@ -1,0 +1,32 @@
+Espec ArBin
+   Constructoras:
+       vacioAB: -> ArBin;
+       consAB: Elem, ArBin, ArBin -> ArBin;
+   Observadoras:
+       esvacioAB: ArBin -> Bool;
+       raiz: ArBin -> Elem;
+   Desdobladoras:
+       izqAB: ArBin -> ArBin;
+       derAb: ArBin -> ArBin;
+   Axiomas: Elem r, ArBin i, d;
+       [ab1] esvacioAB(vacioAB())= Cierto;
+       [ab2] esvacioAB(consAB(r,i,d))= Falso;
+       [ab3] raiz(vacioAB()) = ERROR!!!!;
+       [ab4] raiz(consAB(r,i,d)) = r;
+       [ab5] izqAB(vaciaAB()) = ERROR!!!;
+       [ab6] izqAB(consAB(r,i,d)) = i;
+       [ab7] derAB(vacioAB()) = ERROR;
+       [ab8] derAB(consAB(r,i,d)) = d;
+Fin ArBin.
+
+int EsHoja(ArBin a)= return esvacioAB(izqAB(a))&&esvacio(derAB(a));
+
+a=consAB(1,consAB(2,consAB(6,vacioAB(),vacioAB()),vacioAB()),
+           consAB(3,
+           consAB(4,vacioAB(),vacioAB()),consAB(5,vacioAB(),vacioAB())));
+
+
+
+
+
+
