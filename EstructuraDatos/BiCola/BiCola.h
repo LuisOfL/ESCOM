@@ -14,7 +14,7 @@ BiCola nuevaBi(){
     t->izq=t->der=NULL;
     return t;
 }
-int esnueva(BiCola q){ return (q->izq==NULL)&&(q->izq==NULL);}
+int esnueva(BiCola q){ return (q->izq==NULL)&&(q->der==NULL);}
 
 BiCola formarIzq(Elem e, BiCola q){
     ApNodo t = (ApNodo)malloc(sizeof(struct Nodo));
