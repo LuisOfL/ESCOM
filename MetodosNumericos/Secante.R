@@ -3,7 +3,6 @@ library(ggplot2)
 library(gganimate)
 library(gifski)
 
-# --- Método de la secante ---
 secant_geom <- function(f, x0, x1, n_iter) {
   steps <- data.frame(iter = 0, x = x0, y = f(x0))
   steps <- rbind(steps, data.frame(iter = 1, x = x1, y = f(x1)))
@@ -22,7 +21,7 @@ secant_geom <- function(f, x0, x1, n_iter) {
   steps
 }
 
-# --- Datos de secantes ---
+
 secant_lines <- function(steps) {
   lines <- data.frame()
   for (i in 2:nrow(steps)) {
@@ -36,7 +35,7 @@ secant_lines <- function(steps) {
   lines
 }
 
-# --- Intersección con eje x ---
+
 secant_intersections <- function(steps) {
   inter <- data.frame()
   for (i in 2:nrow(steps)) {
