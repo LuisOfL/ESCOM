@@ -35,7 +35,7 @@ tangent_data <- function(f, df, steps) {
 
 # --- UI ---
 ui <- fluidPage(
-  # CSS para tema oscuro y botones azules redondeados
+ 
   tags$head(
     tags$style(HTML("
       body {background-color: #121212; color: #e0e0e0;}
