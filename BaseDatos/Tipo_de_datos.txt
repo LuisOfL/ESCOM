@@ -1,0 +1,17 @@
+INT / INTEGER	Enteros. Puede tener variantes SMALLINT, BIGINT.
+DECIMAL(p,s) / NUMERIC(p,s)	Números exactos con decimales. p = total de dígitos, s = dígitos después del punto.
+FLOAT / REAL / DOUBLE	Números de punto flotante (aproximados).
+SERIAL (PostgreSQL)	Entero auto incrementable.
+
+CHAR(n)	Cadena de longitud fija n.
+VARCHAR(n)	Cadena de longitud variable hasta n.
+TEXT	Cadena de longitud variable sin límite (en PostgreSQL/MySQL).
+
+DATE	Fecha (AAAA-MM-DD).
+TIME	Hora (HH:MM:SS).
+DATETIME	Fecha y hora combinadas.
+TIMESTAMP	Fecha y hora con zona horaria (en PostgreSQL se usa TIMESTAMP WITH TIME ZONE).
+YEAR (MySQL)	Año en formato YYYY.
+
+BOOLEAN	Verdadero o falso (TRUE/FALSE).
+BIT(n)	Bits, se usan en algunas bases para representar valores booleanos o flags.
