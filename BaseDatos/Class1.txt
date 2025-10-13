@@ -1,0 +1,54 @@
+CREATE DATABASE luis;
+
+
+CREATE TABLE public.alumnos
+(
+    "Fecha_nacimiento" date,
+    "Nombre" character varying(25),
+    "Direccion" character varying(30),
+    "Boleta" integer,
+    id serial,
+    activo boolean,
+    PRIMARY KEY (id)
+);
+
+/* ESTO NO XD*/
+/* --Crea un tipo de dato Nombre, para un atributo compuesto
+CREATE TYPE Nombre AS(
+	"Nombre_1" ,
+	"Nombre_2" ,
+	"Apellido_Paterno" serial,
+
+)
+*/
+/*----------------------------------*/
+
+
+CREATE TABLE public.docente
+(
+	"Nombre_1" character varying(25),
+	"Nombre_2" character varying(25),
+	"Apellido_Paterno" character varying(25),
+	"Apellido_Materno" character varying(25),
+	"#emp" serial,
+	"Fecha_nacimiento" date,
+	"CURP"  character varying(25) unique NOT NULL,
+	CONSTRAINT Pk_Docente PRIMARY KEY ("#emp") 
+);
+
+
+
+CREATE TABLE public.Materia
+(
+    "Codigo" integer,
+    "Nombre" character varying(25),
+    "Creditos" float,
+    PRIMARY KEY ("Codigo")
+);
+
+
+
+
+
+ALTER TABLE IF EXISTS public.alumnos
+    OWNER to postgres;
