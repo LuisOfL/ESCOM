@@ -47,8 +47,10 @@ CREATE TABLE public.Materia
 );
 
 
+/*   Crea sequencia  */
+create sequence boleta_seq as bigint
+start with 2019000000
+minvalue 2019000000
+maxvalue 2999999999
+increment by 1;
 
-
-
-ALTER TABLE IF EXISTS public.alumnos
-    OWNER to postgres;
