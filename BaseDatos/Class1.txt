@@ -12,17 +12,6 @@ CREATE TABLE public.alumnos
     PRIMARY KEY (id)
 );
 
-/* ESTO NO XD*/
-/* --Crea un tipo de dato Nombre, para un atributo compuesto
-CREATE TYPE Nombre AS(
-	"Nombre_1" ,
-	"Nombre_2" ,
-	"Apellido_Paterno" serial,
-
-)
-*/
-/*----------------------------------*/
-
 
 CREATE TABLE public.docente
 (
@@ -46,6 +35,22 @@ CREATE TABLE public.Materia
     PRIMARY KEY ("Codigo")
 );
 
+
+CREATE TYPE genero AS ENUM(
+	 'Femenino',
+	 'Masculino',
+	 'femenino',
+	 'masculino',
+ 	 'FEMENINO',
+	 'MASCULINO'
+);
+
+CREATE TYPE direccion AS ENUM(
+	 'Calle' varchar(100),
+	 'Ciudad' varchar(100),
+	 'Codigo_Postal' varchar(50),
+	 'Colonia' varchar(100)
+);
 
 /*   Crea sequencia  */
 create sequence boleta_seq as bigint
