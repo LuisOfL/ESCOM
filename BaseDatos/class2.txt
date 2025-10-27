@@ -1,0 +1,74 @@
+CREATE DATABASE tienda;
+
+CREATE TYPE direccion_envio AS ENUM(
+	'calle',	
+	'ciudad',
+	'codigo_postal'
+);
+
+CREATE TYPE direccion_envio AS(
+	calle VARCHAR(100),	
+	ciudad VARCHAR(100),
+	codigo_postal VARCHAR(10)
+);
+
+CREATE TYPE estado_pedido AS ENUM(
+	'pendiente',
+	'enviado',
+	'entregado',
+	'cancelado'
+);
+
+CREATE TABLE productos(
+	codigo_pro INT DEFAULT nextval('s') PRIMARY KEY,
+	nombre VARCHAR(50),
+	descripcion VARCHAR(50),
+	PMayoreo FLOAT,
+	PMenureo FLOAT
+);
+
+CREATE TABLE provedor(
+	id_prov INT DEFAULT nextval('s') PRIMARY KEY,
+	nombre VARCHAR(100),
+	direccion_envio VARCHAR(100)
+);
+CREATE TABLE envio_producto_proveedor(
+	FOREING KEY id_prov REFERENCE provedor(id_prov),
+	FOREING KEY codigo_pro REFERENCE productos(codigo_pro),
+	estado_p estado_pedido,
+	direccion_env direccion_envio
+);
+
+
+CREATE SEQUENCE s
+	START WITH 10
+	INCREMENT BY 10;
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
