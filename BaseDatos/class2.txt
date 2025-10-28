@@ -1,58 +1,61 @@
 CREATE DATABASE tienda;
 
 CREATE TYPE direccion_envio AS(
-	calle VARCHAR(100),	
-	ciudad VARCHAR(100),
-	codigo_postal VARCHAR(10)
+    calle VARCHAR(100),    
+    ciudad VARCHAR(100),
+    codigo_postal VARCHAR(10)
 );
 
 CREATE TYPE estado_pedido AS ENUM(
-	'pendiente',
-	'enviado',
-	'entregado',
-	'cancelado'
+    'pendiente',
+    'enviado',
+    'entregado',
+    'cancelado'
 );
 
 CREATE SEQUENCE s
-	START WITH 10
-	INCREMENT BY 10;
-
+    START WITH 10
+    INCREMENT BY 10;
 
 CREATE TABLE productos(
-	codigo_pro INT DEFAULT nextval('s') PRIMARY KEY,
-	nombre VARCHAR(50),
-	descripcion VARCHAR(50),
-	PMayoreo FLOAT,
-	PMenureo FLOAT
+    codigo_pro INT DEFAULT nextval('s') PRIMARY KEY,
+    nombre VARCHAR(50),
+    descripcion VARCHAR(50),
+    PMayoreo FLOAT,
+    PMenureo FLOAT
 );
 
 CREATE TABLE provedor(
-	id_prov INT DEFAULT nextval('s') PRIMARY KEY,
-	nombre VARCHAR(100),
-	direccion_envio VARCHAR(100)
+    id_prov INT DEFAULT nextval('s') PRIMARY KEY,
+    nombre VARCHAR(100),
+    direccion_envio VARCHAR(100)
 );
+
 CREATE TABLE envio_producto_proveedor(
-	id_prov INT,
-	codigo_pro INT,
-	estado_p estado_pedido,
-	direccion_env direccion_envio
+    id_prov INT,
+    codigo_pro INT,
+    estado_p estado_pedido,
+    direccion_env direccion_envio
 );
 
 ALTER TABLE envio_producto_proveedor ADD CONSTRAINT fk_envio_provedor FOREIGN KEY (codigo_pro) REFERENCES productos(codigo_pro);
-
 ALTER TABLE envio_producto_proveedor ADD CONSTRAINT fk_envio_pro FOREIGN KEY (id_prov) REFERENCES provedor(id_prov);
 
-INSERT INTO envio_producto_proveedor(id_prov,codigo_prov,estado_p,direccion_env)
-VALUES(10,10,ROW)
+-- INSERT corregido
+INSERT INTO productos (nombre, descripcion, PMayoreo, PMenureo) VALUES
+('Producto 1', 'Descripcion del producto 1', 15000.00, 18000.00),
+('Producto 2', 'Descripcion del producto 2', 200.00, 350.00);
 
+INSERT INTO provedor (nombre, direccion_envio) VALUES
+('TecnoSupply SA', 'Av. Tecnología 456, Guadalajara, 44100'),
+('ElectroParts MX', 'Blvd. Industrial 789, Monterrey, 64000');
 
+SELECT * FROM productos;
+SELECT * FROM provedor;
 
-
-
-
-
-
-
+INSERT INTO envio_producto_proveedor (id_prov, codigo_pro, estado_p, direccion_env) VALUES
+(10, 10, 'pendiente'::estado_pedido, ROW('Av. Tecnología 456', 'Guadalajara', '44100')::direccion_envio),
+(20, 20, 'enviado'::estado_pedido, ROW('Blvd. Industrial 789', 'Monterrey', '64000')::direccion_envio);
 
 
 
