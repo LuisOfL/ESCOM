@@ -19,12 +19,11 @@ int knapsack(int W, int val[], int wt[], int n) {
 }
 
 int main() {
-    // Primera configuración: 5 objetos
+
     int val1[] = {60, 60, 20, 30, 40};
     int wt1[] = {10, 10, 100, 120, 200};
     int n1 = 5;
     
-    // Segunda configuración: 3 objetos  
     int val2[] = {20, 30, 40};
     int wt2[] = {100, 120, 200};
     int n2 = 3;
@@ -32,7 +31,6 @@ int main() {
     int capacidades[] = {50, 100, 125, 220, 300};
     int num_cap = 5;
     
-    // Imprimir encabezados de la tabla
     printf("bj\\wW    ");
     for(int i = 0; i < n1; i++) 
         printf("%d      ", val1[i]);
@@ -49,12 +47,11 @@ int main() {
     
     printf("----------------------------------------------------------------------\n");
     
-    // Calcular y mostrar resultados para cada capacidad
     for(int c = 0; c < num_cap; c++) {
         int W = capacidades[c];
         printf("%d      ", W);
         
-        // Primera configuración (5 objetos) - mostrar todos los resultados individuales
+
         for(int i = 0; i < n1; i++) {
             int single_val[] = {val1[i]};
             int single_wt[] = {wt1[i]};
@@ -62,7 +59,6 @@ int main() {
             printf("%d      ", result);
         }
         
-        // Segunda configuración (3 objetos) - mostrar todos los resultados individuales
         for(int i = 0; i < n2; i++) {
             int single_val[] = {val2[i]};
             int single_wt[] = {wt2[i]};
