@@ -3,7 +3,7 @@ library(class)
 library(FSelector) # Necesario para chi.squared
 
 #' KNN con selección de características por Chi2 (usando FSelector).
-predict_knn_chi2 <- function(train_data, new_id_row, target_col = "Clase", k = 5, n_features = 3) {
+predict_knn_chi2 <- function(train_data, new_id_row, target_col = "Clase", k = 5, n_features = 10) {
   
   # 0. Preparar datos: Asegurar que la Clase sea un factor para FSelector
   data_chi2 <- train_data

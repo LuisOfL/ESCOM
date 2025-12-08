@@ -11,11 +11,8 @@ source("resources/models/knn_forward.R")
 source("resources/models/knn_combined.R") 
 
 # --------------------------------------------------------------------------
-# --- UI para las Tarjetas de Carga y Búsqueda (SIN CAMBIOS) ---
+# --- UI para las Tarjetas de Carga y Búsqueda ---
 # --------------------------------------------------------------------------
-
-# ... (Insertar la definición de dataset_tools_ui y ui aquí) ... 
-# Usaré la estructura de la respuesta anterior para estas partes.
 
 dataset_tools_ui <- div(
   fluidRow(
@@ -87,35 +84,45 @@ server <- function(input, output, session){
   
   observeEvent(input$Start, { updateTabsetPanel(session, "tabs", selected = "knn") })
   
-  # 2. LÓGICA DE CARGA DE ARCHIVO (SIN CAMBIOS)
+  # 2. LÓGICA DE CARGA DE ARCHIVO (CON LIMPIEZA)
   observeEvent(input$upload_file, {
     file <- input$upload_file
     if (is.null(file)) {
-      rv$data <- NULL
-      shinyjs::disable("search_by_id_card")
-      shinyjs::html(id = "status_message", html = "Carga un archivo para comenzar la predicción.")
-      shinyjs::runjs('document.getElementById("status_message").style.color = "#7b8dc6";') 
-      output$prediction_output <- renderText("")
+      # Código para limpiar interfaz si no hay archivo
+      # ...
       return()
     }
     
     tryCatch({
+      # 1. Cargar datos
       data <- read.csv(file$datapath, header = TRUE, stringsAsFactors = FALSE)
       if (ncol(data) < 2) { stop("El CSV debe tener al menos dos columnas (ID y Clase).") }
+      
+      # 2. Renombrar las primeras dos columnas
       names(data)[1:2] <- c("ID", "Clase")
+      
       required_cols <- c("ID", "Clase") 
       feature_cols <- names(data)[!names(data) %in% required_cols]
       
-      # Intentar convertir las características a numérico
-      data[, feature_cols] <- lapply(data[, feature_cols], function(x) as.numeric(as.character(x)))
+      # 3. Forzar conversión de características a numérico (Genera NAs en datos no numéricos)
+      data[, feature_cols] <- lapply(data[, feature_cols], as.numeric)
       
-      if (any(sapply(data[, feature_cols], function(x) all(is.na(x))))) {
-        stop("Una o más columnas de características (3 en adelante) no son numéricas.")
+      # 4. LIMPIEZA CRÍTICA: Eliminar filas con cualquier NA (Clave para Forward Selection)
+      data_cleaned <- na.omit(data)
+      
+      # 5. Verificación después de la limpieza
+      if (nrow(data_cleaned) < nrow(data)) {
+        showNotification(paste0("Se eliminaron ", nrow(data) - nrow(data_cleaned), " filas con valores faltantes (NA)."), type = "warning")
       }
       
-      rv$data <- data
+      if (nrow(data_cleaned) < 10) { # Condición de seguridad
+        stop("Quedaron muy pocas filas después de la limpieza. Verifique sus datos.")
+      }
+      
+      rv$data <- data_cleaned # Almacenar datos limpios
+      
       shinyjs::enable("search_by_id_card")
-      shinyjs::html(id = "status_message", html = paste0("Dataset '", file$name, "' cargado. Las columnas 1 y 2 son ID y Clase, respectivamente."))
+      shinyjs::html(id = "status_message", html = paste0("Dataset '", file$name, "' cargado. Filas: ", nrow(rv$data)))
       shinyjs::runjs('document.getElementById("status_message").style.color = "#00c6ff";') 
       
     }, error = function(e) {
@@ -127,13 +134,14 @@ server <- function(input, output, session){
     })
   })
   
-  # 3. LÓGICA DE PREDICCIÓN (MODIFICADA para llamar a los 4 archivos)
+  # 3. LÓGICA DE PREDICCIÓN 
   observeEvent(input$Then | input$search_button, {
     
     req(rv$data, input$search_id_input)
     
     input_id <- as.numeric(input$search_id_input)
     
+    # ... (validación de ID sin cambios) ...
     if (is.na(input_id)) {
       showNotification("El ID ingresado no es válido.", type = "error")
       output$prediction_output <- renderText("ID Inválido")
@@ -151,22 +159,20 @@ server <- function(input, output, session){
     prediction_result <- NULL
     
     tryCatch({
+      # Usaremos una partición (train/test) similar a su script de consola
+      # Se asume que k=5 y n_features=3 son parámetros correctos para su aplicación.
       
       if (input$select == "1") {
-        # Llama a la función del archivo knn_normal.R
         prediction_result <- predict_knn_normal(rv$data, new_row, target_col = "Clase", k = 5)
         
       } else if (input$select == "2") {
-        # Llama a la función del archivo knn_chi2.R
-        prediction_result <- predict_knn_chi2(rv$data, new_row, target_col = "Clase", k = 5, n_features = 3)
+        prediction_result <- predict_knn_chi2(rv$data, new_row, target_col = "Clase", k = 5, n_features = 10)
         
       } else if (input$select == "3") {
-        # Llama a la función del archivo knn_forward.R
-        prediction_result <- predict_knn_forward(rv$data, new_row, target_col = "Clase", k = 5, n_features = 3)
+        prediction_result <- predict_knn_forward(rv$data, new_row, target_col = "Clase", k = 5, n_features = 10)
         
       } else if (input$select == "4") {
-        # Llama a la función del archivo knn_combined.R
-        prediction_result <- predict_knn_combined(rv$data, new_row, target_col = "Clase", k = 5, n_chi2 = 3, n_forward = 3)
+        prediction_result <- predict_knn_combined(rv$data, new_row, target_col = "Clase", k = 5, n_chi2 = 10, n_forward = 10)
         
       } else {
         output$prediction_output <- renderText("Selecciona un algoritmo.")
@@ -185,6 +191,7 @@ server <- function(input, output, session){
       shinyjs::runjs('document.getElementById("status_message").style.color = "#00c6ff";') 
       
     }, error = function(e) {
+      # Muestra el error anterior de 'NA/NaN/Inf' o el que sea
       showNotification(paste("Error en el modelo:", e$message), type = "error")
       output$prediction_output <- renderText("ERROR DE MODELO")
       shinyjs::runjs('document.getElementById("status_message").style.color = "red";') 

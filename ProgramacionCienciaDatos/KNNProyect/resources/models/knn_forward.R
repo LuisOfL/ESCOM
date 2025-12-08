@@ -1,61 +1,87 @@
-# Archivo: knn_forward.R
-library(class)
-library(leaps) # Necesario para regsubsets (Forward Selection)
+# Archivo: resources/models/knn_forward.R
 
-#' KNN con selección de características Forward (usando leaps::regsubsets).
-predict_knn_forward <- function(train_data, new_id_row, target_col = "Clase", k = 5, n_features = 3) {
+# Asumimos que train_data es un data.frame limpio (sin NA, ID en col 1, Clase en col 2)
+# new_id_row es la fila a predecir
+# target_col es "Clase"
+# k es el número de vecinos
+# n_features es el número de features a seleccionar
+
+predict_knn_forward <- function(train_data, new_id_row, target_col, k, n_features) {
   
-  # 0. Preparar datos: Quitar ID y asegurar que la Clase es numérica para la regresión
-  data_forward <- train_data[, !names(train_data) %in% c("ID")]
+  # --- 1. PREPARACIÓN DE DATOS (Partición y Normalización) ---
   
-  # NOTA: Forward selection (regsubsets) funciona mejor si la variable Clase es numérica.
-  # Si tu Clase es categórica (texto), esto generará un error o regresión incorrecta.
-  # Intentaremos convertirla a numérica (aunque no es ideal para KNN).
-  if (is.factor(data_forward[[target_col]])) {
-    # Si es factor, usar niveles como 1, 2, 3...
-    data_forward[[target_col]] <- as.numeric(data_forward[[target_col]])
-  }
+  # Separar la fila a predecir (X_test) del resto del entrenamiento (X_train)
+  train_id <- train_data$ID
+  new_id <- new_id_row$ID
   
-  # 1. Realizar Forward Selection
-  formula_fs <- as.formula(paste(target_col, "~ ."))
+  # X_train es todo el dataset menos la fila a predecir
+  datos_train <- train_data[train_id != new_id, ] 
   
-  # Usar n_features + 1 porque regsubsets devuelve el modelo sin variables
-  # y los modelos con 1, 2, 3... variables. Buscamos el modelo de tamaño n_features.
-  max_vars <- min(n_features, ncol(data_forward) - 1)
+  # Separar X_train, y_train, X_test
+  X_train <- datos_train[, !names(datos_train) %in% c("ID", target_col)]
+  y_train <- datos_train[[target_col]]
   
-  forward_model <- leaps::regsubsets(
-    formula_fs, 
-    data = data_forward, 
-    nbest = 1, # El mejor modelo para cada tamaño
-    nvmax = max_vars,
-    method = "forward"
+  X_test_unnormalized <- new_id_row[, !names(new_id_row) %in% c("ID", target_col)]
+  
+  # Convertir a factor para asegurar el correcto etiquetado
+  y_train <- as.factor(y_train)
+  
+  # Normalización Min-Max (solo en X_train y X_test)
+  min_vals <- apply(X_train, 2, min)
+  max_vals <- apply(X_train, 2, max)
+  range_vals <- max_vals - min_vals
+  
+  # Manejar columnas con rango cero (evitar división por cero)
+  range_vals[range_vals == 0] <- 1 
+  
+  X_train_norm <- as.data.frame(scale(X_train, center = min_vals, scale = range_vals))
+  X_test_norm <- as.data.frame(scale(X_test_unnormalized, center = min_vals, scale = range_vals))
+  
+  # --- 2. SELECCIÓN DE CARACTERÍSTICAS (FORWARD) ---
+  
+  # CRÍTICO: regsubsets requiere un factor numérico y una fórmula y ~ .
+  # Convertir la columna objetivo a un vector numérico (1, 2, 3...)
+  y_numeric <- as.numeric(y_train)
+  
+  # Crear el data.frame para la regresión con la columna objetivo nombrada 'y'
+  df_regress <- cbind(y = y_numeric, X_train_norm)
+  
+  # Ejecutar Forward Selection
+  modelo_forward <- leaps::regsubsets(
+    y ~ .,  
+    data = df_regress,
+    method = "forward",
+    nvmax = 10 # Número máximo de features a seleccionar
   )
   
-  # 2. Extraer las características del mejor modelo (el de tamaño max_vars)
-  summary_fs <- summary(forward_model)
+  res <- summary(modelo_forward)
+  # Obtener las variables seleccionadas (n_features)
+  best_vars_index <- res$which[n_features, ]
+  selected_vars <- names(best_vars_index)[best_vars_index][-1] # Eliminar "(Intercept)"
   
-  if (is.null(summary_fs$which) || nrow(summary_fs$which) == 0) {
-    stop("Forward selection no encontró variables válidas.")
+  # Si el modelo no selecciona variables (puede pasar), usar todas
+  if (length(selected_vars) == 0) {
+    warning("Forward selection no eligió variables; usando todas.")
+    selected_vars <- names(X_train_norm)
   }
   
-  # Obtener las variables del mejor modelo de tamaño 'max_vars'
-  vars_matrix <- summary_fs$which[max_vars, ]
+  # --- 3. PREDICCIÓN KNN con Features Seleccionadas ---
   
-  # La primera columna es el intercepto, las variables empiezan desde la segunda
-  selected_features <- names(vars_matrix)[vars_matrix][2:length(vars_matrix)]
+  # Filtrar los datasets normalizados
+  X_train_sel <- X_train_norm[, selected_vars, drop = FALSE]
+  X_test_sel <- X_test_norm[, selected_vars, drop = FALSE]
   
-  # 3. Preparar matrices para knn()
-  train_labels <- train_data[[target_col]]
-  train_matrix <- as.matrix(train_data[, selected_features, drop = FALSE])
-  test_matrix <- as.matrix(new_id_row[, selected_features, drop = FALSE])
-  
-  # 4. Realizar la predicción KNN
-  prediction <- class::knn(
-    train = train_matrix,
-    test = test_matrix,
-    cl = train_labels,
+  # Aplicar KNN
+  pred <- class::knn(
+    train = X_train_sel, 
+    test = X_test_sel, 
+    cl = y_train, 
     k = k
   )
   
-  return(list(prediction = as.character(prediction[1]), features = selected_features))
+  # Preparar resultado unificado
+  return(list(
+    prediction = as.character(pred[1]),
+    features = selected_vars
+  ))
 }
