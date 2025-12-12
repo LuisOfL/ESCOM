@@ -1,0 +1,59 @@
+/* www/styles.css */
+
+body { 
+    background-color: #0d122b;
+    background-image: radial-gradient( ellipse at center, #1a2550 0%, #0d122b 45% ),
+                      linear-gradient( 135deg,
+                                       #21287c 0%,
+                                       #0d122b 35%,
+                                       #0d122b 65%,
+                                       #16327c 100% );
+    background-attachment: fixed;  
+    background-size: cover;
+    color: white; 
+}
+
+/* Estilo para recrear el botón degradado de la imagen */
+.btn-default {
+    /* 1. Degradado (de cian a púrpura/azul oscuro) */
+    background: linear-gradient(90deg, #00d4ff 0%, #5d45f9 100%);
+    
+    /* 2. Color de fondo sólido para navegadores sin soporte (fallback) */
+    background-color: #5d45f9; 
+    
+    /* 3. Texto blanco y en negrita */
+    color: white !important; /* !important asegura que el texto sea blanco */
+    font-weight: bold;
+    font-size: 1.2em; /* Hace el texto más grande */
+    
+    /* 4. Esquinas redondeadas y padding */
+    border-radius: 25px; /* Bordes muy redondeados */
+    border: none; /* Elimina el borde predeterminado */
+    padding: 10px 30px; /* Aumenta el área de clic */
+    
+    /* 5. Sombra sutil para el efecto de profundidad */
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.4);
+    
+    /* 6. Transiciones para el efecto hover */
+    transition: all 0.3s ease;
+}
+
+/* Estilo al pasar el ratón (Hover) */
+.btn-default:hover,
+.btn-default:focus {
+    /* Mueve la sombra ligeramente y cambia el degradado */
+    background: linear-gradient(90deg, #5d45f9 0%, #00d4ff 100%); /* Invierte el degradado o lo ilumina */
+    color: white;
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.6);
+    transform: translateY(-2px); /* Pequeño levantamiento */
+}
+
+/* ----------------------------------------------------------- */
+/* Otros estilos que hemos usado antes para la interfaz */
+/* Ejemplo de estilos de tarjetas o inputs si los necesitas: 
+.well { 
+    background-color: rgba(30, 40, 70, 0.7); 
+    border: 1px solid #3c4c8f;
+    color: white;
+}
+*/
