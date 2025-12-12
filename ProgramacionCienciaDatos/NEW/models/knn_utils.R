@@ -1,4 +1,3 @@
-# Archivo: models/knn_utilidades.R
 library(class)
 library(leaps)
 library(FSelector)
@@ -6,17 +5,14 @@ library(FSelectorRcpp)
 
 preparar_datos_knn <- function(data_path, id_valor) {
   
-  # 1. Leer datos
   datos <- read.csv(data_path)
   
-  # 2. Buscar y Particionar (Test = 1 fila, Train = Resto)
   fila_id <- which(datos[, 1] == id_valor)
   
   if (length(fila_id) == 0) {
     stop(paste("El ID", id_valor, "NO existe en el dataset."))
   }
   
-  # Separación
   datos_train <- datos[-fila_id, ]
   X_train_bruto <- datos_train[, 3:ncol(datos)]
   y_train_bruto <- datos_train[, 2]
@@ -24,14 +20,13 @@ preparar_datos_knn <- function(data_path, id_valor) {
   X_test_bruto <- datos[fila_id, 3:ncol(datos), drop = FALSE] 
   y_test <- datos[fila_id, 2]
   
-  # Asegurar formatos
   X_train_num <- data.frame(lapply(X_train_bruto, as.numeric))
   X_test_num <- data.frame(lapply(X_test_bruto, as.numeric))
   y_train <- as.factor(y_train_bruto)
   clase_real <- as.character(y_test)
   
   
-  # 3. Normalización Min-Max (basada en X_train_num)
+  # 3. Normalización Min-Max (basada en X_train_nu)
   min_vals <- apply(X_train_num, 2, min)
   max_vals <- apply(X_train_num, 2, max)
   denominadores <- max_vals - min_vals

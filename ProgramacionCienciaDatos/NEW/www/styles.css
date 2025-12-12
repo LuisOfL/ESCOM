@@ -12,7 +12,10 @@ body {
     background-size: cover;
     color: white; 
 }
-
+div {
+    margin-top: 8px;
+    margin-bottom: 8px;
+}
 /* Estilo para recrear el botón degradado de la imagen */
 .btn-default {
     /* 1. Degradado (de cian a púrpura/azul oscuro) */

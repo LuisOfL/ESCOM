@@ -11,7 +11,7 @@ source("models/knn_chi2.R")
 source("models/knn_interseccion.R")
 
 ui <- fluidPage(
-  includeCSS("www/styles.css"), 
+  includeCSS("www/styles2.css"), 
   tabsetPanel(
     id = "nav_panel",
     
@@ -80,7 +80,7 @@ ui <- fluidPage(
 
 server <- function(input, output, session) {
   
-  # 🎯 Lógica de Navegación 
+  #  Lógica de Navegación 
   observeEvent(input$Start, {
     updateTabsetPanel(session, "nav_panel", selected = "page2")
   })

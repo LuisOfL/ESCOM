@@ -1,0 +1,12 @@
+name: KNN_Ultimate
+title: KNN_Ultimate
+username: luisdata
+account: luisdata
+server: shinyapps.io
+hostUrl: https://api.shinyapps.io/v1
+appId: 16282167
+bundleId: 11300238
+url: https://luisdata.shinyapps.io/KNN_Ultimate/
+version: 1
+asMultiple: FALSE
+asStatic: FALSE

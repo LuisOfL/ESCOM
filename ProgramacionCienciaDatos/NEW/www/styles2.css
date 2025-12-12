@@ -1,0 +1,118 @@
+/* ======================================= */
+/* Archivo: www/styles.css                 */
+/* Tema: Dark / Modern / Clean             */
+/* ======================================= */
+
+/* 1. ESTILO GENERAL Y TIPOGRAFÍA */
+/* -------------------------------------- */
+
+body {
+    /* Mantener el fondo degradado oscuro/azul cósmico */
+    background-color: #0d122b;
+    background-image: radial-gradient( ellipse at center, #1a2550 0%, #0d122b 45% ),
+                      linear-gradient( 135deg,
+                                       #21287c 0%,
+                                       #0d122b 35%,
+                                       #0d122b 65%,
+                                       #16327c 100% );
+    background-attachment: fixed;  
+    background-size: cover;
+    
+    /* Fuente moderna y color principal */
+    color: #f0f4ff; /* Blanco suave */
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; /* Usar una fuente limpia */
+    line-height: 1.6; /* Mejorar legibilidad */
+}
+
+/* Espaciado de contenedores limpio */
+div {
+    margin-top: 10px;
+    margin-bottom: 10px;
+}
+
+/* 2. ESTILO DE TARJETAS (WELLS / BOXES) */
+/* -------------------------------------- */
+
+/* Aplicable a .well, .box, o cualquier contenedor principal */
+.well, .panel, .data-box {
+    background-color: rgba(30, 40, 70, 0.6); /* Semi-transparente */
+    border: 1px solid #3c4c8f; /* Borde sutil */
+    border-radius: 15px; /* Esquinas redondeadas suaves */
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.4); /* Sombra marcada */
+    padding: 20px;
+    transition: transform 0.3s ease-in-out;
+}
+
+/* Efecto hover sutil para tarjetas */
+.well:hover, .panel:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.6);
+}
+
+/* Títulos dentro de los paneles/tarjetas */
+h2, h3, h4 {
+    color: #00d4ff; /* Cian para títulos */
+    border-bottom: 2px solid rgba(60, 76, 143, 0.4); /* Línea divisoria suave */
+    padding-bottom: 10px;
+    margin-bottom: 15px;
+    font-weight: 600;
+}
+
+/* 3. ESTILO DE BOTÓN (GRADIENTE MODERNO) */
+/* -------------------------------------- */
+
+.btn-default {
+    /* Degradado (de cian a púrpura/azul oscuro) */
+    background: linear-gradient(90deg, #00d4ff 0%, #5d45f9 100%);
+    background-color: #5d45f9;  
+    
+    color: white !important;
+    font-weight: bold;
+    font-size: 1.1em; 
+    
+    border-radius: 12px; /* Menos redondeado para ser más moderno */
+    border: none;
+    padding: 12px 35px; /* Más padding vertical */
+    
+    /* Sombra más enfocada */
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.5);
+    transition: all 0.3s ease;
+}
+
+.btn-default:hover,
+.btn-default:focus {
+    /* Degradado al pasar el ratón: invertido y con más brillo/sombra */
+    background: linear-gradient(90deg, #5d45f9 0%, #00d4ff 100%); 
+    color: white;
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.8);
+    transform: translateY(-3px);
+}
+
+/* 4. ESTILO DE ELEMENTOS DE FORMULARIO (INPUTS/SELECTORES) */
+/* -------------------------------------------------------- */
+
+/* Inputs, Textareas, Selectores */
+.form-control {
+    background-color: rgba(30, 40, 70, 0.9); /* Fondo oscuro */
+    color: #f0f4ff; /* Texto blanco suave */
+    border: 1px solid #5d45f9; /* Borde del color principal */
+    border-radius: 8px;
+    padding: 8px 12px;
+    transition: all 0.3s;
+}
+
+/* Efecto focus en inputs */
+.form-control:focus {
+    border-color: #00d4ff; /* Borde cian al enfocar */
+    box-shadow: 0 0 8px rgba(0, 212, 255, 0.5);
+    background-color: #1a2550; /* Un poco más oscuro */
+    outline: none; /* Eliminar el contorno por defecto del navegador */
+}
+
+/* Etiquetas de texto (labels) */
+label {
+    color: #00d4ff; /* Resaltar etiquetas */
+    font-weight: 500;
+    margin-bottom: 5px;
+    display: block; /* Asegurar que la etiqueta ocupe su propia línea */
+}
