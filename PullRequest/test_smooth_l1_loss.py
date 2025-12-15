@@ -16,10 +16,17 @@ class TestSmoothL1Loss(PytorchLayerTest):
             def forward(self, x, y):
                 return torch.nn.functional.smooth_l1_loss(x, y)
 
+        # model, ref_net, kind
         return SmoothL1LossModel(), None, "aten::smooth_l1_loss"
 
     def test_smooth_l1_loss(self, ie_device, precision):
+        model, ref_net, kind = self.create_model()
+
         self._test(
+            model=model,
+            ref_net=ref_net,
+            kind=kind,
             ie_device=ie_device,
-            precision=precision
+            precision=precision,
+            ir_version=None
         )
