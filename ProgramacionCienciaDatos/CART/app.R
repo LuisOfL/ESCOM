@@ -73,9 +73,6 @@ server <- function(input, output, session){
   # Variable reactiva para almacenar las Top 2 features seleccionadas
   top_features <- reactiveVal(NULL)
   
-  # ---------------------------------------------------------------------
-  # 1. Carga y pre-análisis de datos
-  # ---------------------------------------------------------------------
   
   observeEvent(input$file1, {
     tryCatch({
@@ -118,10 +115,7 @@ server <- function(input, output, session){
     )
   })
   
-  # ---------------------------------------------------------------------
-  # 3. Botones y Navegación
-  # ---------------------------------------------------------------------
-  
+ 
   observeEvent(input$btnPredecirID, {
     req(data_df()) # Solo si se han cargado datos
     updateTabsetPanel(session, "tabs", selected = "2")
@@ -142,20 +136,14 @@ server <- function(input, output, session){
   })
   
   observeEvent(input$btnReturn2, {
-    # Al regresar desde Resultados, volvemos a la pestaña de ID (2) por defecto
-    # Si quieres que recuerde de dónde vino, necesitarías otra variable reactiva.
-    # Por simplicidad, volvemos a MAIN:
     updateTabsetPanel(session, "tabs", selected = "1") 
   })
   
-  # ---------------------------------------------------------------------
-  # 4. Lógica de Predicción
-  # ---------------------------------------------------------------------
   
   # Predicción por ID
   observeEvent(input$btnPredictID, {
     req(data_df())
-    id_val <- as.character(input$id_input) # Asumimos que los IDs pueden ser caracteres
+    id_val <- as.character(input$id_input) 
     
     results <- predecir_por_id(data_df(), id_val)
     
@@ -168,7 +156,7 @@ server <- function(input, output, session){
     # Mostrar resultados
     output$prediction_output <- renderPrint({
       cat("Variables usadas:", results$variables_usadas, "\n")
-      cat("Clase Real (si aplica):", results$clase_real, "\n")
+      cat("Clase Real:", results$clase_real, "\n")
       cat("Clase Predicha:", results$clase_predicha, "\n")
     })
     
