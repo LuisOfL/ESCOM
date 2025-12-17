@@ -5,7 +5,7 @@ library(rpart.plot)
 library(FSelector)
 library(MASS)
 
-# Función Auxiliar para la Selección de las 2 Mejores Características
+
 seleccionar_top_features <- function(df_noID, ycol, es_regresion) {
   predictores <- colnames(df_noID)[-1] # quitar Y
   
@@ -23,10 +23,7 @@ seleccionar_top_features <- function(df_noID, ycol, es_regresion) {
   }
   return(top2)
 }
-
-# ----------------------------------------------------------------------
-# Opción 1: Predicción por ID
-# ----------------------------------------------------------------------
+ 
 predecir_por_id <- function(df, id) {
   ids <- df[,1]
   ycol <- colnames(df)[2]
@@ -111,9 +108,9 @@ predecir_por_id <- function(df, id) {
   ))
 }
 
-# ----------------------------------------------------------------------
-# Opción 2: Predicción por Características
-# ----------------------------------------------------------------------
+
+
+
 predecir_por_features <- function(df, val1, val2) {
   ycol <- colnames(df)[2]
   target <- df[[ycol]]
